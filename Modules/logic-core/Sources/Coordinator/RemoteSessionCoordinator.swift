@@ -27,6 +27,7 @@ public protocol RemoteSessionCoordinator: Sendable {
   func requestReceived() async throws -> PresentationRequest
   func sendResponse(response: RequestItemConvertible) async
   func getState() async -> PresentationState
+  func decline() async -> URL? // <--- ADD THIS
 
   func getStream() -> AsyncStream<PresentationState>
   func setState(presentationState: PresentationState)
@@ -75,7 +76,42 @@ final class RemoteSessionCoordinatorImpl: RemoteSessionCoordinator {
     }
     return createRequest()
   }
-
+    public func decline() async -> URL? {
+        return await withCheckedContinuation { continuation in
+          Task {
+            // 1. Thread-safe box to capture result
+            final class ResultBox: @unchecked Sendable { var url: URL? }
+            let box = ResultBox()
+            
+            // 2. Call the library
+            // If the API returns 200 OK, this closure runs and sets box.url
+            await session.sendResponse(userAccepted: false, itemsToSend: [:], onCancel: nil) { url in
+              box.url = url
+            }
+            
+            // 3. [NEW] Recovery Logic
+            // If box.url is nil, the library likely treated the response as an error.
+            // We check the error description for the JSON response from your API.
+            if box.url == nil, let errorDescription = session.uiError?.localizedDescription {
+                // Try to parse the "redirect_uri" from the error string
+                box.url = extractRedirectUri(from: errorDescription)
+            }
+            
+            // 4. Resume with whatever URL we found (or nil)
+            continuation.resume(returning: box.url)
+          }
+        }
+      }
+    private func extractRedirectUri(from text: String) -> URL? {
+          // The error description is often the raw JSON body:
+          // {"error":"...","redirect_uri":"id-ascertia:///callback..."}
+          guard let data = text.data(using: .utf8),
+                let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                let urlString = json["redirect_uri"] as? String else {
+              return nil
+          }
+          return URL(string: urlString)
+      }
   public func sendResponse(response: RequestItemConvertible) async {
     await session.sendResponse(userAccepted: true, itemsToSend: response.items, onCancel: nil) { url in
       self.sendableCurrentValueSubject.setValue(.responseSent(url))

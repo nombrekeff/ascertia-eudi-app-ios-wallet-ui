@@ -162,11 +162,13 @@ struct WalletKitConfigImpl: WalletKitConfig {
       "pidissuerca02_lu",
       "pidissuerca02_nl",
       "pidissuerca02_pt",
-      "pidissuerca02_ut"
+      "pidissuerca02_ut",
+      "verifier"
     ]
     let certsData: [Data] = certificates.compactMap {
       Data(name: $0, ext: "der")
     }
+
     return .init(trustedCerts: certsData)
   }
 
@@ -180,7 +182,7 @@ struct WalletKitConfigImpl: WalletKitConfig {
   var logFileName: String {
     return "eudi-ios-wallet-logs"
   }
-
+    
   var documentsCategories: DocumentCategories {
     [
       .Government: [

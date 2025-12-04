@@ -201,7 +201,7 @@ open class BaseRequestViewModel<Router: RouterHost>: ViewModel<Router, RequestVi
     )
   }
 
-  func onPop() {
+  open func onPop() {
     isRequestInfoModalShowing = false
     if let route = getPopRoute() {
       router.popTo(with: route)

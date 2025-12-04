@@ -51,8 +51,14 @@ final class PresentationLoadingViewModel<Router: RouterHost, RequestItem: Sendab
         case .error(let error):
           self.onError(with: error)
         case .responseSent(let url):
-          await self.interactor.stopPresentation()
-          self.onNavigate(type: .push(await getOnSuccessRoute(with: url)))
+            await self.interactor.stopPresentation()
+            if let redirectUrl = url {
+                // 2. Open it to switch back to the calling app
+                DispatchQueue.main.async {
+                    UIApplication.shared.open(redirectUrl, options: [:], completionHandler: nil)
+                }
+            }
+            self.onNavigate(type: .push(await getOnSuccessRoute(with: url)))
         default:
           ()
         }

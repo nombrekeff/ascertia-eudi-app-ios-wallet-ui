@@ -65,9 +65,36 @@ final class PresentationRequestViewModel<Router: RouterHost>: BaseRequestViewMod
         )
       }
     case .failure:
-      self.onEmptyDocuments()
+        // 1. Show the "Empty/Error" screen state
+        self.onEmptyDocuments()
+                    
+        await handleDeclineAndRedirect()
     }
   }
+    
+    // This function will now work because 'interactor.onDecline()' returns 'URL?'
+        private func handleDeclineAndRedirect() async {
+            // 1. Get the URL (now valid)
+            let apiUrl = await interactor.onDecline()
+            
+            // 2. Determine target (apiUrl is Optional, so 'if let' works now)
+            if let apiUrl = apiUrl {
+                await MainActor.run {
+                    UIApplication.shared.open(apiUrl, options: [:], completionHandler: nil)
+                }
+            } 
+        }
+    
+        // Fallback URL Generator (reused logic)
+        private func generateFallbackErrorURL() -> URL? {
+            var urlString = getRelyingParty().toString // Gets the client_id/RP name
+            if !urlString.contains("://") {
+                urlString += "://"
+            }
+            // Append error params so your app knows what happened
+            urlString += "error?reason=user_cancelled"
+            return URL(string: urlString)
+        }
 
   override func onShare() {
     Task {
@@ -153,6 +180,15 @@ final class PresentationRequestViewModel<Router: RouterHost>: BaseRequestViewMod
   override func getTrustedRelyingPartyInfo() -> LocalizableStringKey {
     .requestDataVerifiedEntityMessage
   }
+    
+    override func onPop() {
+            Task {
+                // This triggers the network call to send 'access_denied' to the Verifier
+                await interactor.onDecline()
+            }
+            // Proceed with closing the screen
+            super.onPop()
+        }
 
   func handleDeepLinkNotification(with info: [AnyHashable: Any]) {
     Task {

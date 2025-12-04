@@ -48,6 +48,7 @@ public protocol PresentationInteractor: Sendable {
   func updatePresentationCoordinator(with coordinator: RemoteSessionCoordinator) async
   func storeDynamicIssuancePendingUrl(with url: URL) async
   func stopPresentation() async
+  func onDecline() async -> URL? // <--- ADD THIS
 }
 
 final actor PresentationInteractorImpl: PresentationInteractor {
@@ -110,6 +111,16 @@ final actor PresentationInteractorImpl: PresentationInteractor {
       return .failure(error)
     }
   }
+    
+    public func onDecline() async -> URL? {
+        do {
+            // Get the coordinator and call decline()
+            return try await sessionCoordinatorHolder.getActiveRemoteCoordinator().decline()
+        } catch {
+            // If there is no active coordinator, return nil
+            return nil
+        }
+    }
 
   public func onResponsePrepare(requestItems: [RequestDataUiModel]) async -> Result<RequestItemConvertible, Error> {
 

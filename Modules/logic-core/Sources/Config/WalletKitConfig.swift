@@ -170,7 +170,9 @@ struct WalletKitConfigImpl: WalletKitConfig {
       "pidissuerca02_nl",
       "pidissuerca02_pt",
       "pidissuerca02_ut",
-      "verifier"
+      "verifier",
+      "verifier_cert",
+      "verifier_cert_demo"
     ]
     let certsData: [Data] = certificates.compactMap {
       Data(name: $0, ext: "der")

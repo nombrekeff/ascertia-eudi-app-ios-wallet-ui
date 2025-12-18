@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C03E06D2EF2D569002E146C /* verifier_cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 0C03E06B2EF2D569002E146C /* verifier_cert.der */; };
+		0C03E06E2EF2D569002E146C /* verifier_cert_demo.der in Resources */ = {isa = PBXBuildFile; fileRef = 0C03E06C2EF2D569002E146C /* verifier_cert_demo.der */; };
 		0C4FD4E22ED5F5580034B61C /* verifier.der in Resources */ = {isa = PBXBuildFile; fileRef = 0C4FD4E12ED5F5580034B61C /* verifier.der */; };
 		F02921632B8E07870076A58B /* WalletDemoRelease.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = F02921612B8E07870076A58B /* WalletDemoRelease.xcconfig */; };
 		F02921642B8E07870076A58B /* WalletDevRelease.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = F02921622B8E07870076A58B /* WalletDevRelease.xcconfig */; };
@@ -39,6 +41,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0C03E06B2EF2D569002E146C /* verifier_cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = verifier_cert.der; sourceTree = "<group>"; };
+		0C03E06C2EF2D569002E146C /* verifier_cert_demo.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = verifier_cert_demo.der; sourceTree = "<group>"; };
 		0C4FD4E12ED5F5580034B61C /* verifier.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = verifier.der; sourceTree = "<group>"; };
 		1198ECD72AC453F200F4E71A /* logic-resources */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "logic-resources"; path = "Modules/logic-resources"; sourceTree = "<group>"; };
 		F018D9F32D087C410015876D /* logic-storage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "logic-storage"; path = "Modules/logic-storage"; sourceTree = "<group>"; };
@@ -111,6 +115,8 @@
 				F0A984732DA917130051A4DB /* pidissuerca02_nl.der */,
 				F0A984742DA917130051A4DB /* pidissuerca02_pt.der */,
 				F0A984752DA917130051A4DB /* pidissuerca02_ut.der */,
+				0C03E06B2EF2D569002E146C /* verifier_cert.der */,
+				0C03E06C2EF2D569002E146C /* verifier_cert_demo.der */,
 			);
 			path = Certificate;
 			sourceTree = "<group>";
@@ -262,6 +268,8 @@
 				F1CACAE02AC3097100B40DED /* WalletDev.xcconfig in Resources */,
 				F0A013992AC35ECA00065EAD /* logic-api in Resources */,
 				F0A0139A2AC35ECA00065EAD /* feature-startup in Resources */,
+				0C03E06D2EF2D569002E146C /* verifier_cert.der in Resources */,
+				0C03E06E2EF2D569002E146C /* verifier_cert_demo.der in Resources */,
 				F1CACAE22AC3098C00B40DED /* WalletDemo.xcconfig in Resources */,
 				F0BFE9B72AD557290062826F /* feature-common in Resources */,
 				F0A984762DA917130051A4DB /* pidissuerca02_ut.der in Resources */,
